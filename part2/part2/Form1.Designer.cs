@@ -112,6 +112,7 @@
             this.creditTabControl.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.creditTabControl.TabIndex = 1;
             this.creditTabControl.Tag = "";
+            this.creditTabControl.Selected += new System.Windows.Forms.TabControlEventHandler(this.creditTabControl_Selected);
             // 
             // creditTp
             // 
@@ -181,9 +182,13 @@
             this.errorDataGridView.Name = "errorDataGridView";
             this.errorDataGridView.Size = new System.Drawing.Size(694, 332);
             this.errorDataGridView.TabIndex = 0;
+            this.errorDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.errorDataGridView_CellClick);
+            this.errorDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.errorDataGridView_CellDoubleClick);
+            this.errorDataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.errorDataGridView_CellFormatting);
             // 
             // correctBt
             // 
+            this.correctBt.Enabled = false;
             this.correctBt.Location = new System.Drawing.Point(276, 409);
             this.correctBt.Name = "correctBt";
             this.correctBt.Size = new System.Drawing.Size(439, 61);
@@ -191,6 +196,7 @@
             this.correctBt.Text = "Correct";
             this.correctBt.UseVisualStyleBackColor = true;
             this.correctBt.Visible = false;
+            this.correctBt.Click += new System.EventHandler(this.correctBt_Click);
             // 
             // Form1
             // 

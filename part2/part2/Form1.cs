@@ -79,10 +79,10 @@ namespace part2
                 string[] splits = line.Split(new Char[] { ',' }); // , ' '
                 int size = splits.Length;
                 DataRow newRow = table.NewRow();
-                newRow["Client Number"] = size >= 1 ? splits[0] : null;
-                newRow["Transaction Type"] = size >= 2 ? splits[1] : null;
-                newRow["Transaction Date"] = size >= 3 ? splits[2] : null;
-                newRow["Transaction Amount"] = size >= 4 ? splits[3] : null;
+                newRow["Client Number"] = size >= 1 ? splits[0].Trim() : null;
+                newRow["Transaction Type"] = size >= 2 ? splits[1].Trim() : null;
+                newRow["Transaction Date"] = size >= 3 ? splits[2].Trim() : null;
+                newRow["Transaction Amount"] = size >= 4 ? splits[3].Trim() : null;
                 table.Rows.Add(newRow);
             }
             return table;
@@ -147,5 +147,101 @@ namespace part2
             Close();
         }
 
+        private void creditTabControl_Selected(object sender, TabControlEventArgs e)
+        {
+            correctBt.Visible = e.TabPageIndex == 2;
+        }
+
+        private void errorDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            DataGridViewCell dgvc = errorDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            try
+            {
+                validateCell(dgvc, e.ColumnIndex);
+            }
+            catch (Exception ex){
+                dgvc.Style.ForeColor = Color.Red;
+                dgvc.ErrorText = ex.Message;
+            }
+        }
+        private void errorDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView view = (DataGridView)sender;
+            //this.currentRow = view.Rows[e.RowIndex];
+            correctBt.Enabled = true;
+        }
+        private void errorDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView view = (DataGridView)sender;
+            DataGridViewRow dgvr = view.Rows[e.RowIndex];
+            CellEditor ce = new CellEditor(dgvr, e.ColumnIndex);
+            if (ce.ShowDialog() == DialogResult.OK)
+            {
+
+            }
+        }
+        private void validateCell(DataGridViewCell dgvc, int columnIndex)
+        {
+            string dgvcStr = dgvc.Value.ToString().Trim();
+            switch (columnIndex)
+            {
+                case 0:
+                    if (dgvcStr.Equals("")) throw new Exception("Missing Client Number");
+                    int clientNumber;
+                    if (!int.TryParse(dgvcStr, out clientNumber))
+                    {
+                        throw new Exception("Invalid Client Number");
+                    }
+                    if (!validateluhn("" + clientNumber))
+                    {
+                        throw new Exception("Client Number Invalid check digit");
+                    }
+                    break;
+
+                case 1:
+                    if (dgvcStr.Equals("")) throw new Exception("Missing type code");
+                    if (!(dgvcStr.Equals("Cr") || dgvcStr.Equals("Dr"))) throw new Exception("Invalid type code");
+                    break;
+
+                case 2:
+                    if (dgvcStr.Equals("")) throw new Exception("Missing Transaction Date");
+                    DateTime tempDateTime;
+                    if (!DateTime.TryParseExact(dgvcStr, new string[] { "d/MM/yyyy", "dd/M/yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out tempDateTime)) 
+                        throw new Exception("Invalid Transaction Date");
+                    if (tempDateTime < new DateTime(2011, 1, 1) || tempDateTime > new DateTime(2012, 12, 31))
+                        throw new Exception("Transaction Date Out of range");
+                    break;
+
+                case 3:
+                    if (dgvcStr.Equals("")) throw new Exception("Missing Transaction Date");
+                    double amount;
+                    if (!double.TryParse(dgvcStr, out amount))
+                    {
+                        throw new Exception("Transaction Amount Non-numeric");
+                    }
+                    if (amount <= 0 || amount >= 5000)
+                    {
+                        string str = "";
+                        if (amount < 0) { str = "Negative"; }
+                        if (amount == 0) { str = "Zero"; }
+                        if (amount >= 5000) { str = "larger than 5000"; }
+                        throw new Exception("Transaction Amount " + str);
+                    }
+                    break;
+                default:
+                    throw new Exception("Errrrrror");
+
+            }
+        }
+
+        private void correctBt_Click(object sender, EventArgs e)
+        {
+            //int index = errorDataGridView.SelectedRows[0].
+            CellEditor ce = new CellEditor(errorDataGridView.SelectedCells[0]);
+            if (ce.ShowDialog() == DialogResult.OK)
+            {
+
+            }
+        }
     }
 }
