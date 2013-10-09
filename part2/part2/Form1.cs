@@ -79,76 +79,11 @@ namespace part2
                 string[] splits = line.Split(new Char[] { ',' }); // , ' '
                 int size = splits.Length;
                 DataRow newRow = table.NewRow();
-                newRow["Client Number"] = size >= 1 ? splits[0].Trim() : null;
-                newRow["Transaction Type"] = size >= 2 ? splits[1].Trim() : null;
-                newRow["Transaction Date"] = size >= 3 ? splits[2].Trim() : null;
-                newRow["Transaction Amount"] = size >= 4 ? splits[3].Trim() : null;
-                //newRow.DefaultCellStyle.ForeColor = Color.Red;
-                
+                newRow["Client Number"] = size >= 1 ? splits[0] : null;
+                newRow["Transaction Type"] = size >= 2 ? splits[1] : null;
+                newRow["Transaction Date"] = size >= 3 ? splits[2] : null;
+                newRow["Transaction Amount"] = size >= 4 ? splits[3] : null;
                 table.Rows.Add(newRow);
-                //table.Rows.Add((splits[0] == null? null : splits[0]),(splits[1] == null? null : splits[1]),(splits[2] == null? null : splits[2]),(splits[3] == null? null : splits[3]));
-                try
-                {
-
-                    if (splits.Length != 4) throw new Exception("Truncated record");
-
-                    foreach (string str in splits)
-                    {
-                        if (str.Trim().Equals(""))
-                        {
-                            throw new Exception("Truncated record");
-                        }
-                    }
-
-                    int clientNumber;
-                    if (!int.TryParse(splits[0], out clientNumber))
-                    {
-                        throw new Exception("Invalid Client Number");
-                    }
-                    if (!validateluhn("" + clientNumber))
-                    {
-                        throw new Exception("Client Number Invalid check digit");
-                    }
-
-                    if (!(splits[1].Trim().Equals("Cr") || splits[1].Trim().Equals("Dr")))
-                    {
-                        throw new Exception("Invalid type code");
-                    }
-
-                    DateTime tempDateTime;
-                    string[] dateFormats = { "d/MM/yyyy", "dd/M/yyyy" };
-                    if (!DateTime.TryParseExact(splits[2].Trim(), dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out tempDateTime))
-                    {
-                        throw new Exception("Invalid Transaction Date");
-                    }
-                    if (tempDateTime < new DateTime(2011, 1, 1) || tempDateTime > new DateTime(2012, 12, 31))
-                    {
-                        throw new Exception("Transaction Date Out of range");
-                    }
-
-                    double amount;
-                    if (!double.TryParse(splits[3].Trim(), out amount))
-                    {
-                        throw new Exception("Transaction Amount Non-numeric");
-                    }
-                    if (amount <= 0 || amount >= 5000)
-                    {
-                        string str = "";
-                        if (amount < 0) { str = "Negative"; }
-                        if (amount == 0) { str = "Zero"; }
-                        if (amount >= 5000) { str = "larger than 5000"; }
-                        throw new Exception("Transaction Amount " + str);
-                    }
-
-                }
-                catch (Exception ex)
-                {
-
-                }
-                finally
-                {
-                    
-                }
             }
             return table;
         }
@@ -212,89 +147,5 @@ namespace part2
             Close();
         }
 
-        private void dataGridView3_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void creditDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void creditTabControl_Selected(object sender, TabControlEventArgs e)
-        {
-        }
-
-        private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TabControl_Selected(object sender, TabControlEventArgs e)
-        {
-            if (e.TabPageIndex == 2)
-            {
-                correctBt.Visible = true;
-                validate(errorDataGridView);
-            }
-            else
-            {
-                correctBt.Visible = false;
-            }
-        }
-        private void validate(DataGridView dgv)
-        {
-            foreach (DataGridViewRow dg in dgv.Rows)
-            {
-                if (dg.Cells.Count != 4)
-                {
-                    dg.DefaultCellStyle.BackColor = Color.LightPink;
-                }
-                else
-                {
-                    dg.DefaultCellStyle.BackColor = Color.White;
-                }
-                validateRow(dg);
-                Console.WriteLine();
-            }
-        }
-        private List<int> validateRow(DataGridViewRow dg)
-        {
-            List<int> list = new List<int>();
-
-                for (int i = 0; i < dg.Cells.Count; i++)
-                {
-                    //Console.Write(dg.Cells[i].Value + "-");
-                    if (i == 0)
-                    { 
-                        int clientNumber;
-                        if (!int.TryParse(dg.Cells[i].Value.ToString(), out clientNumber)
-                            || !validateluhn("" + clientNumber))
-                        {
-                            //throw new Exception("Invalid Client Number");
-                            list.Add(i);
-                        }
-                    }
-                    if (i == 1)
-                    {
-                        if (!(dg.Cells[i].Value.ToString().Trim().Equals("Cr") || dg.Cells[i].Value.ToString().Trim().Equals("Dr")))
-                        {
-                            //throw new Exception("Invalid type code");
-                            list.Add(i);
-                        }
-                    }
-                    if (i == 2)
-                    { 
-                        
-                    }
-                }
-            return list;
-        }
-
-        private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
     }
 }

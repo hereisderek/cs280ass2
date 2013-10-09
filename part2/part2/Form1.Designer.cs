@@ -34,7 +34,7 @@
             this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.TabControl = new System.Windows.Forms.TabControl();
+            this.creditTabControl = new System.Windows.Forms.TabControl();
             this.creditTp = new System.Windows.Forms.TabPage();
             this.creditDataGridView = new System.Windows.Forms.DataGridView();
             this.debitTp = new System.Windows.Forms.TabPage();
@@ -43,7 +43,7 @@
             this.errorDataGridView = new System.Windows.Forms.DataGridView();
             this.correctBt = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
-            this.TabControl.SuspendLayout();
+            this.creditTabControl.SuspendLayout();
             this.creditTp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.creditDataGridView)).BeginInit();
             this.debitTp.SuspendLayout();
@@ -99,21 +99,19 @@
             this.exitToolStripMenuItem1.Text = "Exit";
             this.exitToolStripMenuItem1.Click += new System.EventHandler(this.exitToolStripMenuItem1_Click);
             // 
-            // TabControl
+            // creditTabControl
             // 
-            this.TabControl.Controls.Add(this.creditTp);
-            this.TabControl.Controls.Add(this.debitTp);
-            this.TabControl.Controls.Add(this.errorTp);
-            this.TabControl.Cursor = System.Windows.Forms.Cursors.Default;
-            this.TabControl.Location = new System.Drawing.Point(12, 27);
-            this.TabControl.Name = "TabControl";
-            this.TabControl.SelectedIndex = 0;
-            this.TabControl.Size = new System.Drawing.Size(708, 364);
-            this.TabControl.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
-            this.TabControl.TabIndex = 1;
-            this.TabControl.Tag = "";
-            this.TabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl_SelectedIndexChanged);
-            this.TabControl.Selected += new System.Windows.Forms.TabControlEventHandler(this.TabControl_Selected);
+            this.creditTabControl.Controls.Add(this.creditTp);
+            this.creditTabControl.Controls.Add(this.debitTp);
+            this.creditTabControl.Controls.Add(this.errorTp);
+            this.creditTabControl.Cursor = System.Windows.Forms.Cursors.Default;
+            this.creditTabControl.Location = new System.Drawing.Point(12, 27);
+            this.creditTabControl.Name = "creditTabControl";
+            this.creditTabControl.SelectedIndex = 0;
+            this.creditTabControl.Size = new System.Drawing.Size(708, 364);
+            this.creditTabControl.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
+            this.creditTabControl.TabIndex = 1;
+            this.creditTabControl.Tag = "";
             // 
             // creditTp
             // 
@@ -131,13 +129,13 @@
             this.creditDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.creditDataGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
             this.creditDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.creditDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.creditDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.creditDataGridView.Location = new System.Drawing.Point(3, 3);
             this.creditDataGridView.MultiSelect = false;
             this.creditDataGridView.Name = "creditDataGridView";
             this.creditDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.creditDataGridView.Size = new System.Drawing.Size(700, 338);
+            this.creditDataGridView.Size = new System.Drawing.Size(694, 332);
             this.creditDataGridView.TabIndex = 0;
-            this.creditDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellClick);
             // 
             // debitTp
             // 
@@ -154,10 +152,11 @@
             // 
             this.debitDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.debitDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.debitDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.debitDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.debitDataGridView.Location = new System.Drawing.Point(3, 3);
             this.debitDataGridView.MultiSelect = false;
             this.debitDataGridView.Name = "debitDataGridView";
-            this.debitDataGridView.Size = new System.Drawing.Size(700, 342);
+            this.debitDataGridView.Size = new System.Drawing.Size(694, 332);
             this.debitDataGridView.TabIndex = 0;
             // 
             // errorTp
@@ -176,12 +175,12 @@
             this.errorDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.errorDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllHeaders;
             this.errorDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.errorDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.errorDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.errorDataGridView.Location = new System.Drawing.Point(3, 3);
             this.errorDataGridView.MultiSelect = false;
             this.errorDataGridView.Name = "errorDataGridView";
-            this.errorDataGridView.Size = new System.Drawing.Size(700, 338);
+            this.errorDataGridView.Size = new System.Drawing.Size(694, 332);
             this.errorDataGridView.TabIndex = 0;
-            this.errorDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView3_CellContentClick);
             // 
             // correctBt
             // 
@@ -199,14 +198,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(736, 494);
             this.Controls.Add(this.correctBt);
-            this.Controls.Add(this.TabControl);
+            this.Controls.Add(this.creditTabControl);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.TabControl.ResumeLayout(false);
+            this.creditTabControl.ResumeLayout(false);
             this.creditTp.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.creditDataGridView)).EndInit();
             this.debitTp.ResumeLayout(false);
@@ -226,7 +225,7 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-        private System.Windows.Forms.TabControl TabControl;
+        private System.Windows.Forms.TabControl creditTabControl;
         private System.Windows.Forms.TabPage creditTp;
         private System.Windows.Forms.DataGridView creditDataGridView;
         private System.Windows.Forms.TabPage debitTp;

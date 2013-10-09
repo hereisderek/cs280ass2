@@ -10,11 +10,18 @@ using System.Windows.Forms;
 
 namespace part2
 {
-    public partial class correct : Form
+    public partial class CellEditor : Form
     {
-        public correct()
+        DataGridViewCell dgvc;
+        public CellEditor(DataGridViewCell dgvc)
         {
+            this.dgvc = dgvc;
             InitializeComponent();
+        }
+
+        private void CellEditor_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
