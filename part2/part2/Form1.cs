@@ -15,7 +15,7 @@ namespace part2
 
     public partial class Form1 : Form
     {
-        public bool fileModified = false;
+        public bool[] modified = { false, false, false };
         public bool fileOpened = false;
         public string binPath = Path.GetDirectoryName(Application.ExecutablePath);
         public string creditFilePath, debitFilePath, errorFilePath;
@@ -23,6 +23,7 @@ namespace part2
         public List<string> creditList = new List<string>();
         public List<string> debitList = new List<string>();
         public List<string> errorList = new List<string>();
+        //public int currentTabPageIndex = 0;
         public Form1()
         {
             defaultFolder = Directory.GetParent(binPath).Parent.Parent.Parent;
@@ -37,10 +38,6 @@ namespace part2
 
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
@@ -65,6 +62,7 @@ namespace part2
                 debitDataGridView.DataSource = GetTable(debitList);
                 errorDataGridView.DataSource = GetTable(errorList);
             }
+            saveAsToolStripMenuItem.Enabled = true;
         }
         private DataTable GetTable(List<string> list)
         {
@@ -154,12 +152,35 @@ namespace part2
 
         private void errorDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
+            //DataGridViewCellEventArgs arg = new DataGridViewCellEventArgs(e.ColumnIndex, e.RowIndex);
+            //dataGridView_CellValueChanged(sender, arg);
+        }
+
+        private void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            Console.WriteLine("dataGridView_CellValueChanged");
+            modified[creditTabControl.SelectedIndex] = true;
+            saveToolStripMenuItem.Enabled = modified[creditTabControl.SelectedIndex];
+            saveAllToolStripMenuItem.Enabled = (modified[0] || modified[1] || modified[2]);
+
+            if (!creditTabControl.SelectedTab.Text.Substring(creditTabControl.SelectedTab.Text.Length-1).Contains('*'))
+                creditTabControl.SelectedTab.Text += "*";
+            
             DataGridViewCell dgvc = errorDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            colorCells(dgvc, e.ColumnIndex);
+        }
+        private void colorCells(DataGridViewCell dgvc, int columnIndex)
+        {
             try
             {
-                validateCell(dgvc, e.ColumnIndex);
+                validateCell(dgvc, columnIndex);
+                dgvc.Style.ForeColor = Color.Black;
+                dgvc.ErrorText = "";
+                dgvc.Style.BackColor = Color.White;
             }
-            catch (Exception ex){
+            catch (Exception ex)
+            {
+                if (dgvc.Value.ToString().Equals("")) dgvc.Style.BackColor = Color.LightPink;
                 dgvc.Style.ForeColor = Color.Red;
                 dgvc.ErrorText = ex.Message;
             }
@@ -167,7 +188,6 @@ namespace part2
         private void errorDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridView view = (DataGridView)sender;
-            //this.currentRow = view.Rows[e.RowIndex];
             correctBt.Enabled = true;
         }
         private void errorDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -180,7 +200,7 @@ namespace part2
 
             }
         }
-        private void validateCell(DataGridViewCell dgvc, int columnIndex)
+        public static void validateCell(DataGridViewCell dgvc, int columnIndex)
         {
             string dgvcStr = dgvc.Value.ToString().Trim();
             switch (columnIndex)
@@ -236,12 +256,94 @@ namespace part2
 
         private void correctBt_Click(object sender, EventArgs e)
         {
-            //int index = errorDataGridView.SelectedRows[0].
             CellEditor ce = new CellEditor(errorDataGridView.SelectedCells[0]);
             if (ce.ShowDialog() == DialogResult.OK)
             {
 
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveToFile(creditTabControl.SelectedIndex, null);
+            modified[creditTabControl.SelectedIndex] = false;
+            saveToolStripMenuItem.Enabled = false;
+            if (creditTabControl.SelectedTab.Text[creditTabControl.SelectedTab.Text.Length - 1].Equals('*'))
+                creditTabControl.SelectedTab.Text = creditTabControl.SelectedTab.Text.Substring(0, creditTabControl.SelectedTab.Text.Length - 1);
+        }
+
+        private bool saveToFile(int index, string path)
+        {
+            if (path == null) path = creditFilePath;
+            DataGridView view = new DataGridView();
+            switch (index) {
+                case 0: view = creditDataGridView; if (path == null) path = creditFilePath; break;
+                case 1: view = debitDataGridView; if (path == null) path = debitFilePath; break;
+                case 3: view = errorDataGridView; if (path == null) path = errorFilePath; break;
+                default: break;
+            }
+            StringBuilder sb = new StringBuilder();
+            StreamWriter sw = new StreamWriter(path);
+            string line = "";
+            try
+            {
+                foreach (DataGridViewRow row in view.Rows)
+                {
+                    line = row.Cells[0].Value.ToString() + ", " +
+                        row.Cells[1].Value.ToString() + ", " +
+                        row.Cells[2].Value.ToString() + ", " +
+                        row.Cells[3].Value.ToString();
+                    sw.WriteLine(line);
+                    //Console.WriteLine("writing line: " + line);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            saveAllToolStripMenuItem.Enabled = (modified[0] || modified[1] || modified[2]);
+            sw.Flush();
+            sw.Close();
+            return true;
+        }
+
+        private void creditTabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            saveToolStripMenuItem.Enabled = modified[creditTabControl.SelectedIndex];
+        }
+
+        private void errorDataGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.ColumnIndex > 0 && e.RowIndex > 0)
+            {
+                DataGridView view = (DataGridView)sender; 
+                DataGridViewCell dgvc = view.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                colorCells(dgvc, e.ColumnIndex);
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            String defaultPath;
+            switch (creditTabControl.SelectedIndex) { 
+                case 0:
+                    defaultPath = creditFilePath; break;
+                case 1:
+                    defaultPath = debitFilePath; break;
+                case 2:
+                    defaultPath = errorFilePath; break;
+                default:
+                    defaultPath = null;
+                    break;
+            }
+            saveToFile(creditTabControl.SelectedIndex, defaultPath);
         }
     }
 }

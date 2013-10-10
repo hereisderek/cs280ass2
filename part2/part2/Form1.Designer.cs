@@ -30,7 +30,7 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.openToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,7 +56,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem1,
-            this.saveToolStripMenuItem1,
+            this.saveToolStripMenuItem,
             this.saveAllToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.exitToolStripMenuItem1});
@@ -73,24 +73,31 @@
             this.openToolStripMenuItem1.Text = "Open";
             this.openToolStripMenuItem1.Click += new System.EventHandler(this.openToolStripMenuItem1_Click);
             // 
-            // saveToolStripMenuItem1
+            // saveToolStripMenuItem
             // 
-            this.saveToolStripMenuItem1.Enabled = false;
-            this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
-            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(43, 20);
-            this.saveToolStripMenuItem1.Text = "Save";
+            this.saveToolStripMenuItem.Enabled = false;
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAllToolStripMenuItem
             // 
+            this.saveAllToolStripMenuItem.Enabled = false;
             this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
+            this.saveAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
             this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
             this.saveAllToolStripMenuItem.Text = "Save all";
             // 
             // saveAsToolStripMenuItem
             // 
+            this.saveAsToolStripMenuItem.Enabled = false;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
             this.saveAsToolStripMenuItem.Text = "Save as..";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem1
             // 
@@ -112,6 +119,7 @@
             this.creditTabControl.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.creditTabControl.TabIndex = 1;
             this.creditTabControl.Tag = "";
+            this.creditTabControl.SelectedIndexChanged += new System.EventHandler(this.creditTabControl_SelectedIndexChanged);
             this.creditTabControl.Selected += new System.Windows.Forms.TabControlEventHandler(this.creditTabControl_Selected);
             // 
             // creditTp
@@ -137,6 +145,7 @@
             this.creditDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.creditDataGridView.Size = new System.Drawing.Size(694, 332);
             this.creditDataGridView.TabIndex = 0;
+            this.creditDataGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellValueChanged);
             // 
             // debitTp
             // 
@@ -159,6 +168,7 @@
             this.debitDataGridView.Name = "debitDataGridView";
             this.debitDataGridView.Size = new System.Drawing.Size(694, 332);
             this.debitDataGridView.TabIndex = 0;
+            this.debitDataGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellValueChanged);
             // 
             // errorTp
             // 
@@ -185,6 +195,8 @@
             this.errorDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.errorDataGridView_CellClick);
             this.errorDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.errorDataGridView_CellDoubleClick);
             this.errorDataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.errorDataGridView_CellFormatting);
+            this.errorDataGridView.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.errorDataGridView_CellPainting);
+            this.errorDataGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellValueChanged);
             // 
             // correctBt
             // 
@@ -209,6 +221,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.creditTabControl.ResumeLayout(false);
@@ -227,7 +240,7 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;

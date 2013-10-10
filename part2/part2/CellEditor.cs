@@ -14,6 +14,7 @@ namespace part2
     {
         DataGridViewRow dgvr;
         DataGridViewCell dgvc;
+        DataGridViewRow newDgvr;
         public CellEditor(DataGridViewRow dgvr, int columeIndex)
         {
             this.dgvr = dgvr;
@@ -29,63 +30,87 @@ namespace part2
             InitializeComponent();
         }
 
-        private void UpdateFidles()
+        private bool updateFidles()
         {
-            if (dgvr.Cells[0].ErrorText != null)
+            newDgvr = (DataGridViewRow)this.dgvr.Clone();
+            newDgvr.Cells[0].Value = textBox1.Text;
+            newDgvr.Cells[1].Value = textBox2.Text;
+            newDgvr.Cells[2].Value = textBox3.Text;
+            newDgvr.Cells[3].Value = textBox4.Text;
+
+            textBox1.BackColor = Color.White;
+            textBox2.BackColor = Color.White;
+            textBox3.BackColor = Color.White;
+            textBox4.BackColor = Color.White;
+            string errorMessage = "";
+            for (int i = 0; i < newDgvr.Cells.Count; i++)
             {
-                label5.Text = dgvr.Cells[0].ErrorText;
+                newDgvr.Cells[i].ErrorText = "";
+                try
+                {
+                    Form1.validateCell(newDgvr.Cells[i], i);
+                }
+                catch (Exception ex)
+                {
+                    newDgvr.Cells[i].ErrorText = ex.Message;
+                    //if (!newDgvr.Cells[i].ErrorText.ToString().Equals("")) errorMessage += newDgvr.Cells[i].ErrorText + "\n";
+                    errorMessage += ex.Message + "\n";
+                    switch (i)
+                    {
+                        case 0:
+                            textBox1.BackColor = Color.LightPink;
+                            break;
+                        case 1:
+                            textBox2.BackColor = Color.LightPink;
+                            break;
+                        case 2:
+                            textBox3.BackColor = Color.LightPink;
+                            break;
+                        case 3:
+                            textBox4.BackColor = Color.LightPink;
+                            break;
+                    }
+
+                }
             }
-            else
+
+            if (label5.Visible = !errorMessage.Equals(""))
             {
-
+                label5.Text = errorMessage;
+                label5.ForeColor = Color.Red;
             }
-            label5.Visible = dgvr.Cells[0].ErrorText != null;
-
-            if (dgvr.Cells[1].ErrorText != null)
-            {
-                label6.Text = dgvr.Cells[1].ErrorText;
-            }
-            else
-            {
-
-            }
-            label6.Visible = dgvr.Cells[1].ErrorText != null;
-
-            if (dgvr.Cells[2].ErrorText != null)
-            {
-                label7.Text = dgvr.Cells[2].ErrorText;
-            }
-            else
-            {
-
-            }
-            label7.Visible = dgvr.Cells[2].ErrorText != null;
-
-            if (dgvr.Cells[3].ErrorText != null)
-            {
-                label8.Text = dgvr.Cells[3].ErrorText;
-            }
-            else
-            {
-
-            }
-            label8.Visible =  dgvr.Cells[3].ErrorText != null;
-
-            textBox1.Text = dgvr.Cells[0].Value.ToString();
-            textBox2.Text = dgvr.Cells[1].Value.ToString();
-            textBox3.Text = dgvr.Cells[2].Value.ToString();
-            textBox4.Text = dgvr.Cells[3].Value.ToString();
-
+            return true;
         }
 
         private void CellEditor_Load(object sender, EventArgs e)
         {
-            UpdateFidles();
+            textBox1.Text = dgvr.Cells[0].Value.ToString();
+            textBox2.Text = dgvr.Cells[1].Value.ToString();
+            textBox3.Text = dgvr.Cells[2].Value.ToString();
+            textBox4.Text = dgvr.Cells[3].Value.ToString();
+            updateFidles();
         }
 
         private void saveBt_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 4; i++)
+            {
+                this.dgvr.Cells[i].Value = newDgvr.Cells[i].Value;
+            }
+            //if (updateFidles())
+            //{
 
+
+            //}
+            //else {
+            //    return;
+            //}
+        }
+
+        private void textBox_TextChanged(object sender, EventArgs e)
+        {
+            updateFidles();
+            saveBt.Enabled = true;
         }
     }
 }
