@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace part2
 {
 
@@ -206,6 +207,7 @@ namespace part2
             switch (columnIndex)
             {
                 case 0:
+                    Console.WriteLine("validate client number: " + dgvcStr + " : " + validateluhn(dgvcStr));
                     if (dgvcStr.Equals("")) throw new Exception("Missing Client Number");
                     int clientNumber;
                     if (!int.TryParse(dgvcStr, out clientNumber))
@@ -320,7 +322,7 @@ namespace part2
 
         private void errorDataGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
-            if (e.ColumnIndex > 0 && e.RowIndex > 0)
+            if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
             {
                 DataGridView view = (DataGridView)sender; 
                 DataGridViewCell dgvc = view.Rows[e.RowIndex].Cells[e.ColumnIndex];
@@ -330,9 +332,10 @@ namespace part2
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
             String defaultPath;
-            switch (creditTabControl.SelectedIndex) { 
+            switch (creditTabControl.SelectedIndex)
+            {
                 case 0:
                     defaultPath = creditFilePath; break;
                 case 1:
@@ -343,7 +346,18 @@ namespace part2
                     defaultPath = null;
                     break;
             }
-            saveToFile(creditTabControl.SelectedIndex, defaultPath);
+            saveFileDialog.InitialDirectory = defaultPath;
+            saveFileDialog.Title = "Save " + creditTabControl.SelectedTab.Text + " as";
+            saveFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            saveFileDialog.RestoreDirectory = true;
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                saveToFile(creditTabControl.SelectedIndex, defaultPath = saveFileDialog.FileName);
+            }
+
+            
         }
     }
 }

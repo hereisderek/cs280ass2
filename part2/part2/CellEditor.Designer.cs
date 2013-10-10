@@ -40,6 +40,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.validateBt = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,9 +48,9 @@
             // 
             this.saveBt.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.saveBt.Enabled = false;
-            this.saveBt.Location = new System.Drawing.Point(12, 240);
+            this.saveBt.Location = new System.Drawing.Point(110, 240);
             this.saveBt.Name = "saveBt";
-            this.saveBt.Size = new System.Drawing.Size(132, 38);
+            this.saveBt.Size = new System.Drawing.Size(106, 38);
             this.saveBt.TabIndex = 0;
             this.saveBt.Text = "save";
             this.saveBt.UseVisualStyleBackColor = true;
@@ -58,9 +59,9 @@
             // cancle
             // 
             this.cancle.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancle.Location = new System.Drawing.Point(181, 240);
+            this.cancle.Location = new System.Drawing.Point(222, 240);
             this.cancle.Name = "cancle";
-            this.cancle.Size = new System.Drawing.Size(142, 38);
+            this.cancle.Size = new System.Drawing.Size(101, 38);
             this.cancle.TabIndex = 1;
             this.cancle.Text = "cancle";
             this.cancle.UseVisualStyleBackColor = true;
@@ -182,11 +183,22 @@
             this.label5.Text = "label5";
             this.label5.Visible = false;
             // 
+            // validateBt
+            // 
+            this.validateBt.Location = new System.Drawing.Point(7, 240);
+            this.validateBt.Name = "validateBt";
+            this.validateBt.Size = new System.Drawing.Size(97, 38);
+            this.validateBt.TabIndex = 9;
+            this.validateBt.Text = "validate";
+            this.validateBt.UseVisualStyleBackColor = true;
+            this.validateBt.Click += new System.EventHandler(this.validateBt_Click);
+            // 
             // CellEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(338, 338);
+            this.Controls.Add(this.validateBt);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.cancle);
             this.Controls.Add(this.saveBt);
@@ -215,5 +227,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Button validateBt;
     }
 }

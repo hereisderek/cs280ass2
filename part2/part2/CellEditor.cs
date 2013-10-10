@@ -32,6 +32,7 @@ namespace part2
 
         private bool updateFidles()
         {
+            bool pass = true;
             newDgvr = (DataGridViewRow)this.dgvr.Clone();
             newDgvr.Cells[0].Value = textBox1.Text;
             newDgvr.Cells[1].Value = textBox2.Text;
@@ -52,6 +53,7 @@ namespace part2
                 }
                 catch (Exception ex)
                 {
+                    pass = false;
                     newDgvr.Cells[i].ErrorText = ex.Message;
                     //if (!newDgvr.Cells[i].ErrorText.ToString().Equals("")) errorMessage += newDgvr.Cells[i].ErrorText + "\n";
                     errorMessage += ex.Message + "\n";
@@ -70,7 +72,7 @@ namespace part2
                             textBox4.BackColor = Color.LightPink;
                             break;
                     }
-
+                    
                 }
             }
 
@@ -79,7 +81,7 @@ namespace part2
                 label5.Text = errorMessage;
                 label5.ForeColor = Color.Red;
             }
-            return true;
+            return pass;
         }
 
         private void CellEditor_Load(object sender, EventArgs e)
@@ -111,6 +113,19 @@ namespace part2
         {
             updateFidles();
             saveBt.Enabled = true;
+        }
+
+        private void validateBt_Click(object sender, EventArgs e)
+        {
+            bool pass = updateFidles();
+            if (pass)
+            {
+                System.Windows.Forms.MessageBox.Show("No error found", "pass");
+            }
+            else 
+            {
+                System.Windows.Forms.MessageBox.Show(label5.Text, "error");
+            }
         }
     }
 }
