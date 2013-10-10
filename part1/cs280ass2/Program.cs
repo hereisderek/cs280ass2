@@ -15,12 +15,12 @@ namespace cs280ass2
 
         static void Main(string[] args)
         {
-            if (args != null && args[0].Equals("-l"))
-            {
-                Console.WriteLine("calidating number " + args[1] + " : " + validateluhn(args[1]));
-                Console.WriteLine("Press any key to exit."); System.Console.ReadKey();
-                return;
-            }
+            //if (args != null && args[0].Equals("-l"))
+            //{
+            //    Console.WriteLine("calidating number " + args[1] + " : " + validateluhn(args[1]));
+            //    Console.WriteLine("Press any key to exit."); System.Console.ReadKey();
+            //    return;
+            //}
             string[] lines = System.IO.File.ReadAllLines(@"../../../../Transactions.txt");
             int counter = 1;
             foreach (string line in lines)

@@ -120,6 +120,7 @@ namespace part2
             {
                 StreamReader sr = new StreamReader(creditFilePath);
                 string str;
+                StreamReader sr2 = new StreamReader(creditFilePath);
                 while ((str = sr.ReadLine()) != null)
                 {
                     creditList.Add(str);
@@ -174,7 +175,7 @@ namespace part2
         {
             try
             {
-                validateCell(dgvc, columnIndex);
+                validateCell(dgvc, columnIndex);   
                 dgvc.Style.ForeColor = Color.Black;
                 dgvc.ErrorText = "";
                 dgvc.Style.BackColor = Color.White;
@@ -235,7 +236,7 @@ namespace part2
                     break;
 
                 case 3:
-                    if (dgvcStr.Equals("")) throw new Exception("Missing Transaction Date");
+                    if (dgvcStr.Equals("")) throw new Exception("Missing Transaction Amount");
                     double amount;
                     if (!double.TryParse(dgvcStr, out amount))
                     {
