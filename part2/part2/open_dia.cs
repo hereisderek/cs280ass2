@@ -131,7 +131,11 @@ namespace part2
                 creditFilePath = creditTb.Text;
                 debitFilePath = debitTb.Text;
                 errorFilePath = errorTb.Text;
-                form1.fileOpened = true;
+                //form1.fileOpened = { false, false, false };
+                //foreach (bool bol in form1.fileOpened) bol = true;
+                form1.fileOpened[0] = true;
+                form1.fileOpened[1] = true;
+                form1.fileOpened[2] = true;
                 form1.creditFilePath = creditTb.Text;
                 form1.debitFilePath = debitTb.Text;
                 form1.errorFilePath = errorTb.Text;

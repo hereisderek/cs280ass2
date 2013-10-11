@@ -16,8 +16,8 @@ namespace part2
 
     public partial class Form1 : Form
     {
-        public bool[] modified = { false, false, false };
-        public bool fileOpened = false;
+        public bool[] modified = { false, false, false};
+        public bool[] fileOpened = { false, false, false};
         public string binPath = Path.GetDirectoryName(Application.ExecutablePath);
         public string creditFilePath, debitFilePath, errorFilePath;
         public DirectoryInfo defaultFolder;
@@ -52,6 +52,21 @@ namespace part2
 
         private void openToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+//            if (!Form1_FormClosing(sender, null)) return;
+            if (this.modified[0] || this.modified[1] || this.modified[2])
+            {
+                DialogResult dr = MessageBox.Show("file modified, do You Want to Save Data?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                Console.WriteLine("DialogResult: " + dr);
+                if (dr == DialogResult.Yes)
+                {
+                    saveAllToolStripMenuItem_Click(sender, null);
+                }
+                else if (dr == DialogResult.Cancel)
+                {
+                    if (sender == openToolStripMenuItem1) { return; }
+                }
+            }
+
             open_dia op = new open_dia(this);
             DialogResult result = op.ShowDialog();
             //saveToolStripMenuItem1.Enabled = this.fileOpened;
@@ -114,13 +129,14 @@ namespace part2
         }
         private void openFile()
         {
+            creditList = new List<string>();
+            debitList = new List<string>();
+            errorList = new List<string>();
             // read credit file
-
+            StreamReader sr = new StreamReader(creditFilePath);;
             try
             {
-                StreamReader sr = new StreamReader(creditFilePath);
                 string str;
-                StreamReader sr2 = new StreamReader(creditFilePath);
                 while ((str = sr.ReadLine()) != null)
                 {
                     creditList.Add(str);
@@ -137,8 +153,12 @@ namespace part2
                 }
             }
             catch (Exception ex)
-            { 
-                
+            {
+
+            }
+            finally
+            {
+                sr.Close();
             }
         }
 
@@ -282,15 +302,14 @@ namespace part2
 
         private bool saveToFile(int index, string path)
         {
-            if (path == null) path = creditFilePath;
+            //if (path == null) path = creditFilePath;
             DataGridView view = new DataGridView();
             switch (index) {
                 case 0: view = creditDataGridView; if (path == null) path = creditFilePath; break;
                 case 1: view = debitDataGridView; if (path == null) path = debitFilePath; break;
-                case 3: view = errorDataGridView; if (path == null) path = errorFilePath; break;
+                case 2: view = errorDataGridView; if (path == null) path = errorFilePath; break;
                 default: break;
             }
-            StringBuilder sb = new StringBuilder();
             StreamWriter sw = new StreamWriter(path);
             string line = "";
             try
@@ -307,12 +326,16 @@ namespace part2
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                //Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                sw.Flush();
+                sw.Close();
             }
 
             saveAllToolStripMenuItem.Enabled = (modified[0] || modified[1] || modified[2]);
-            sw.Flush();
-            sw.Close();
+
             return true;
         }
 
@@ -358,6 +381,39 @@ namespace part2
                 saveToFile(creditTabControl.SelectedIndex, defaultPath = saveFileDialog.FileName);
             }
 
+            
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.modified[0] || this.modified[1] || this.modified[2])
+            {
+                DialogResult dr = MessageBox.Show("file modified, do You Want to Save Data?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (dr == DialogResult.Yes)
+                {
+                    saveAllToolStripMenuItem_Click(sender, null);
+                }
+                else if (dr == DialogResult.Cancel)
+                {
+                    if (sender == openToolStripMenuItem1) { } 
+                    else e.Cancel = true;
+                }
+            }
+        }
+
+        private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+            for (int i = 0; i < 3; i++)
+            {
+                if (modified[i]) saveToFile(i, null);
+                modified[i] = false;
+                if (creditTabControl.TabPages[i].Text[creditTabControl.TabPages[i].Text.Length - 1].Equals('*'))
+                    creditTabControl.TabPages[i].Text = creditTabControl.TabPages[i].Text.Substring(0, creditTabControl.SelectedTab.Text.Length - 1);
+            }
+            
+            saveToolStripMenuItem.Enabled = false;
+            saveAllToolStripMenuItem.Enabled = false;
             
         }
     }
